@@ -1,0 +1,1738 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>UNLOCK – שחרר את הגרסה האמיתית שלך</title>
+
+  <!-- Google Fonts: Heebo (bold titles) + Rubik (body) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;700;900&family=Rubik:wght@300;400;500;600&display=swap" rel="stylesheet" />
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            heebo: ['Heebo', 'sans-serif'],
+            rubik: ['Rubik', 'sans-serif'],
+          },
+        }
+      }
+    };
+  </script>
+
+  <style>
+    /* ============================================================
+       ROOT VARIABLES & RESET
+    ============================================================ */
+    :root {
+      --bg-void:        #000000;
+      --bg-deep:        #0a0a0a;
+      --bg-card:        #111111;
+      --bg-elevated:    #181818;
+      --border-subtle:  rgba(255,255,255,0.07);
+      --border-glow:    rgba(168,85,247,0.4);
+
+      --purple-core:  #a855f7;
+      --pink-core:    #ec4899;
+      --orange-core:  #f97316;
+      --cyan-core:    #06b6d4;
+      --green-core:   #22c55e;
+      --red-core:     #ef4444;
+      --yellow-core:  #eab308;
+
+      --text-primary:   #f4f4f5;
+      --text-secondary: #a1a1aa;
+      --text-muted:     #52525b;
+
+      --glow-purple: 0 0 20px rgba(168,85,247,0.5), 0 0 60px rgba(168,85,247,0.2);
+      --glow-pink:   0 0 20px rgba(236,72,153,0.5), 0 0 60px rgba(236,72,153,0.2);
+      --glow-orange: 0 0 20px rgba(249,115,22,0.5), 0 0 60px rgba(249,115,22,0.2);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; }
+
+    html, body {
+      margin: 0; padding: 0;
+      background: var(--bg-void);
+      color: var(--text-primary);
+      font-family: 'Rubik', sans-serif;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* ============================================================
+       SCROLLBAR
+    ============================================================ */
+    ::-webkit-scrollbar { width: 4px; }
+    ::-webkit-scrollbar-track { background: var(--bg-void); }
+    ::-webkit-scrollbar-thumb { background: var(--purple-core); border-radius: 2px; }
+
+    /* ============================================================
+       BACKGROUND MESH
+    ============================================================ */
+    .bg-mesh {
+      position: fixed; inset: 0; z-index: 0; pointer-events: none;
+      background:
+        radial-gradient(ellipse 600px 400px at 10% 20%, rgba(168,85,247,0.07) 0%, transparent 70%),
+        radial-gradient(ellipse 500px 300px at 90% 80%, rgba(249,115,22,0.06) 0%, transparent 70%),
+        radial-gradient(ellipse 400px 500px at 50% 50%, rgba(236,72,153,0.04) 0%, transparent 70%);
+    }
+
+    /* ============================================================
+       TYPOGRAPHY
+    ============================================================ */
+    .font-display { font-family: 'Heebo', sans-serif; }
+
+    /* ============================================================
+       PAGE & SCREEN SYSTEM
+    ============================================================ */
+    .screen {
+      position: fixed; inset: 0; z-index: 10;
+      display: flex; align-items: center; justify-content: center;
+      padding: 1rem;
+      transition: opacity 0.5s ease, transform 0.5s ease;
+    }
+    .screen.hidden { opacity: 0; pointer-events: none; transform: translateY(20px); }
+    .screen.active { opacity: 1; pointer-events: all; transform: translateY(0); }
+
+    /* ============================================================
+       CARD BASE
+    ============================================================ */
+    .card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: 20px;
+      padding: 2rem;
+    }
+    .card-glow {
+      border-color: var(--border-glow);
+      box-shadow: 0 0 30px rgba(168,85,247,0.12);
+    }
+
+    /* ============================================================
+       INPUTS & TEXTAREAS
+    ============================================================ */
+    textarea, input[type="text"], input[type="file"] {
+      background: var(--bg-elevated);
+      border: 1px solid var(--border-subtle);
+      border-radius: 12px;
+      color: var(--text-primary);
+      font-family: 'Rubik', sans-serif;
+      font-size: 1rem;
+      line-height: 1.6;
+      transition: border-color 0.3s, box-shadow 0.3s;
+      outline: none;
+      resize: none;
+      width: 100%;
+      padding: 1rem;
+    }
+    textarea:focus, input[type="text"]:focus {
+      border-color: var(--purple-core);
+      box-shadow: 0 0 0 3px rgba(168,85,247,0.15);
+    }
+    textarea::placeholder { color: var(--text-muted); }
+
+    /* ============================================================
+       BUTTONS
+    ============================================================ */
+    .btn-primary {
+      display: inline-flex; align-items: center; justify-content: center;
+      gap: 0.5rem;
+      background: linear-gradient(135deg, var(--purple-core), var(--pink-core));
+      color: white; border: none; border-radius: 12px;
+      font-family: 'Heebo', sans-serif; font-weight: 700; font-size: 1rem;
+      padding: 0.875rem 2rem; cursor: pointer;
+      transition: transform 0.2s, box-shadow 0.3s, opacity 0.2s;
+      box-shadow: 0 4px 20px rgba(168,85,247,0.3);
+      width: 100%;
+    }
+    .btn-primary:hover { transform: translateY(-2px); box-shadow: var(--glow-purple); }
+    .btn-primary:active { transform: scale(0.97); }
+    .btn-primary:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
+
+    .btn-secondary {
+      display: inline-flex; align-items: center; justify-content: center;
+      gap: 0.5rem;
+      background: transparent; color: var(--text-secondary);
+      border: 1px solid var(--border-subtle); border-radius: 12px;
+      font-family: 'Rubik', sans-serif; font-weight: 500; font-size: 0.9rem;
+      padding: 0.75rem 1.5rem; cursor: pointer;
+      transition: border-color 0.2s, color 0.2s;
+      width: auto;
+    }
+    .btn-secondary:hover { border-color: var(--purple-core); color: var(--text-primary); }
+
+    .btn-orange {
+      background: linear-gradient(135deg, var(--orange-core), var(--yellow-core));
+      box-shadow: 0 4px 20px rgba(249,115,22,0.3);
+    }
+    .btn-orange:hover { box-shadow: var(--glow-orange); }
+
+    .btn-green {
+      background: linear-gradient(135deg, #16a34a, #22c55e);
+      box-shadow: 0 4px 20px rgba(34,197,94,0.3);
+    }
+
+    /* ============================================================
+       ONBOARDING STEP CARD
+    ============================================================ */
+    .onboarding-card {
+      width: 100%; max-width: 540px;
+      animation: slideUp 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+    }
+    @keyframes slideUp {
+      from { opacity: 0; transform: translateY(30px) scale(0.97); }
+      to   { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+    /* ============================================================
+       STEP INDICATOR
+    ============================================================ */
+    .step-dots { display: flex; gap: 6px; justify-content: center; }
+    .step-dot {
+      width: 6px; height: 6px; border-radius: 999px;
+      background: var(--text-muted); transition: all 0.3s ease;
+    }
+    .step-dot.active { background: var(--purple-core); width: 20px; box-shadow: var(--glow-purple); }
+    .step-dot.done { background: var(--pink-core); }
+
+    /* ============================================================
+       CHAR COUNTER
+    ============================================================ */
+    .char-counter { font-size: 0.75rem; color: var(--text-muted); text-align: left; }
+    .char-counter.warn { color: var(--orange-core); }
+    .char-counter.max  { color: var(--red-core); }
+
+    /* ============================================================
+       SLIDER – SOFT/HARDCORE
+    ============================================================ */
+    .mode-slider-track {
+      position: relative; height: 3px;
+      background: var(--bg-elevated); border-radius: 999px; margin: 1.5rem 0;
+    }
+    .mode-slider-fill {
+      position: absolute; top: 0; right: 0; height: 100%;
+      background: linear-gradient(90deg, var(--purple-core), var(--orange-core));
+      border-radius: 999px; transition: width 0.2s;
+    }
+    input[type="range"] {
+      -webkit-appearance: none; width: 100%; height: 3px;
+      background: transparent; position: relative; z-index: 2;
+      direction: ltr;
+    }
+    input[type="range"]::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      width: 24px; height: 24px; border-radius: 50%;
+      background: white;
+      box-shadow: 0 0 10px rgba(168,85,247,0.6), 0 2px 8px rgba(0,0,0,0.4);
+      cursor: pointer; transition: transform 0.2s;
+    }
+    input[type="range"]::-webkit-slider-thumb:hover { transform: scale(1.2); }
+
+    .slider-label {
+      font-family: 'Heebo', sans-serif; font-weight: 700;
+      font-size: 0.875rem; transition: color 0.3s, opacity 0.3s;
+    }
+    .slider-label.soft  { color: var(--purple-core); }
+    .slider-label.hard  { color: var(--orange-core); }
+    .slider-label.inactive { opacity: 0.35; }
+
+    .slider-value-badge {
+      text-align: center; padding: 0.5rem 1.5rem;
+      border-radius: 999px; font-family: 'Heebo', sans-serif;
+      font-weight: 700; font-size: 0.9rem;
+      background: var(--bg-elevated); border: 1px solid var(--border-subtle);
+      transition: all 0.3s;
+    }
+
+    /* ============================================================
+       GOAL GRID
+    ============================================================ */
+    .goal-grid {
+      display: grid; grid-template-columns: repeat(2, 1fr); gap: 0.75rem;
+    }
+    .goal-item {
+      background: var(--bg-elevated); border: 2px solid var(--border-subtle);
+      border-radius: 14px; padding: 1rem 0.75rem;
+      text-align: center; cursor: pointer;
+      transition: border-color 0.25s, transform 0.2s, box-shadow 0.25s;
+      font-family: 'Heebo', sans-serif; font-weight: 700; font-size: 0.9rem;
+    }
+    .goal-item:hover { transform: translateY(-2px); border-color: var(--purple-core); }
+    .goal-item.selected {
+      border-color: var(--pink-core);
+      background: rgba(236,72,153,0.1);
+      box-shadow: 0 0 20px rgba(236,72,153,0.2);
+    }
+    .goal-item .goal-icon { font-size: 1.75rem; margin-bottom: 0.4rem; display: block; }
+
+    /* ============================================================
+       DASHBOARD
+    ============================================================ */
+    #screen-dashboard {
+      position: fixed; inset: 0; z-index: 10; overflow-y: auto;
+      display: flex; flex-direction: column; align-items: center;
+      padding: 1.5rem 1rem 5rem;
+      transition: opacity 0.5s ease;
+    }
+    #screen-dashboard.hidden { opacity: 0; pointer-events: none; }
+    #screen-dashboard.active { opacity: 1; pointer-events: all; }
+
+    .dash-wrapper { width: 100%; max-width: 540px; }
+
+    /* ============================================================
+       MODE TOGGLE (Levels / Aura)
+    ============================================================ */
+    .mode-toggle-bar {
+      display: flex; background: var(--bg-elevated);
+      border: 1px solid var(--border-subtle); border-radius: 14px;
+      overflow: hidden; margin-bottom: 1.5rem;
+    }
+    .mode-toggle-btn {
+      flex: 1; padding: 0.75rem; text-align: center;
+      font-family: 'Heebo', sans-serif; font-weight: 700; font-size: 0.9rem;
+      cursor: pointer; border: none; background: transparent;
+      color: var(--text-muted); transition: all 0.3s;
+    }
+    .mode-toggle-btn.active {
+      background: linear-gradient(135deg, var(--purple-core), var(--pink-core));
+      color: white; border-radius: 12px;
+      box-shadow: 0 4px 15px rgba(168,85,247,0.3);
+    }
+
+    /* ============================================================
+       XP PROGRESS BAR
+    ============================================================ */
+    .xp-bar-track {
+      height: 10px; background: var(--bg-elevated);
+      border-radius: 999px; overflow: hidden;
+      border: 1px solid var(--border-subtle);
+    }
+    .xp-bar-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--purple-core), var(--pink-core), var(--orange-core));
+      border-radius: 999px;
+      transition: width 1s cubic-bezier(0.34, 1.56, 0.64, 1);
+      box-shadow: 0 0 10px rgba(168,85,247,0.6);
+    }
+    .aura-bar-fill {
+      background: linear-gradient(90deg, var(--cyan-core), var(--purple-core), var(--pink-core), var(--orange-core), var(--yellow-core));
+      box-shadow: 0 0 15px rgba(6,182,212,0.5), 0 0 30px rgba(168,85,247,0.3);
+    }
+
+    /* ============================================================
+       LEVEL BADGE
+    ============================================================ */
+    .level-badge {
+      display: inline-flex; align-items: center; justify-content: center;
+      width: 56px; height: 56px; border-radius: 50%;
+      background: linear-gradient(135deg, var(--purple-core), var(--pink-core));
+      font-family: 'Heebo', sans-serif; font-weight: 900; font-size: 1.1rem;
+      box-shadow: var(--glow-purple);
+      flex-shrink: 0;
+    }
+
+    /* ============================================================
+       AURA SCORE
+    ============================================================ */
+    .aura-score {
+      font-family: 'Heebo', sans-serif; font-weight: 900;
+      font-size: 2.5rem; line-height: 1;
+      background: linear-gradient(135deg, var(--cyan-core), var(--purple-core), var(--pink-core));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    /* ============================================================
+       CATEGORY SHORTCUTS
+    ============================================================ */
+    .category-grid {
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.75rem;
+      margin-bottom: 1.5rem;
+    }
+    .cat-item {
+      background: var(--bg-card); border: 1px solid var(--border-subtle);
+      border-radius: 14px; padding: 1rem 0.5rem; text-align: center;
+      cursor: pointer; transition: all 0.25s;
+    }
+    .cat-item:hover { border-color: var(--purple-core); transform: translateY(-2px); }
+    .cat-item .cat-icon { font-size: 1.5rem; margin-bottom: 0.35rem; display: block; }
+    .cat-item .cat-label {
+      font-family: 'Heebo', sans-serif; font-weight: 700; font-size: 0.75rem;
+      color: var(--text-secondary);
+    }
+
+    /* ============================================================
+       QUEST CARD
+    ============================================================ */
+    .quest-card {
+      background: var(--bg-card); border-radius: 20px;
+      border: 1px solid var(--border-subtle); overflow: hidden;
+      transition: border-color 0.3s;
+    }
+    .quest-card.hard-glow {
+      border-color: rgba(249,115,22,0.5);
+      box-shadow: 0 0 30px rgba(249,115,22,0.15);
+    }
+
+    .quest-header {
+      padding: 1.25rem 1.5rem;
+      background: linear-gradient(135deg, rgba(168,85,247,0.1), rgba(236,72,153,0.05));
+      border-bottom: 1px solid var(--border-subtle);
+      display: flex; align-items: center; justify-content: space-between;
+    }
+
+    .difficulty-badge {
+      display: inline-flex; align-items: center; gap: 0.25rem;
+      padding: 0.3rem 0.7rem; border-radius: 999px;
+      font-family: 'Heebo', sans-serif; font-weight: 700; font-size: 0.75rem;
+    }
+    .diff-easy   { background: rgba(34,197,94,0.15);  color: var(--green-core);  border: 1px solid rgba(34,197,94,0.3); }
+    .diff-medium { background: rgba(234,179,8,0.15);  color: var(--yellow-core); border: 1px solid rgba(234,179,8,0.3); }
+    .diff-hard   { background: rgba(249,115,22,0.15); color: var(--orange-core); border: 1px solid rgba(249,115,22,0.4); }
+
+    /* Double XP badge */
+    .double-xp-badge {
+      display: inline-flex; align-items: center; gap: 0.4rem;
+      padding: 0.5rem 1rem; border-radius: 999px;
+      background: linear-gradient(135deg, var(--orange-core), var(--yellow-core));
+      color: black; font-family: 'Heebo', sans-serif; font-weight: 900; font-size: 0.9rem;
+      box-shadow: var(--glow-orange);
+      animation: pulseGlow 2s ease-in-out infinite;
+    }
+    @keyframes pulseGlow {
+      0%, 100% { box-shadow: var(--glow-orange); }
+      50%       { box-shadow: 0 0 30px rgba(249,115,22,0.8), 0 0 80px rgba(249,115,22,0.3); }
+    }
+
+    /* XP tag */
+    .xp-tag {
+      display: inline-flex; align-items: center; gap: 0.3rem;
+      padding: 0.3rem 0.75rem; border-radius: 999px;
+      background: rgba(168,85,247,0.15); color: var(--purple-core);
+      border: 1px solid rgba(168,85,247,0.3);
+      font-family: 'Heebo', sans-serif; font-weight: 700; font-size: 0.85rem;
+    }
+
+    /* ============================================================
+       IMAGE UPLOAD
+    ============================================================ */
+    .upload-zone {
+      border: 2px dashed var(--border-subtle); border-radius: 14px;
+      padding: 1.5rem; text-align: center; cursor: pointer;
+      transition: border-color 0.3s, background 0.3s;
+      background: var(--bg-elevated);
+      position: relative; overflow: hidden;
+    }
+    .upload-zone:hover, .upload-zone.drag-over {
+      border-color: var(--purple-core);
+      background: rgba(168,85,247,0.05);
+    }
+    .upload-zone input[type="file"] {
+      position: absolute; inset: 0; opacity: 0; cursor: pointer;
+      padding: 0; border: none; background: none;
+    }
+    .upload-preview {
+      width: 100%; max-height: 200px; object-fit: cover;
+      border-radius: 10px; margin-top: 0.75rem;
+    }
+
+    /* ============================================================
+       VERIFICATION RESULT
+    ============================================================ */
+    .verify-result {
+      padding: 1rem; border-radius: 12px; margin-top: 1rem;
+      display: flex; gap: 0.75rem; align-items: flex-start;
+      animation: slideUp 0.4s ease both;
+    }
+    .verify-success { background: rgba(34,197,94,0.1); border: 1px solid rgba(34,197,94,0.3); }
+    .verify-fail    { background: rgba(239,68,68,0.1);  border: 1px solid rgba(239,68,68,0.3); }
+
+    /* ============================================================
+       XP GAIN ANIMATION
+    ============================================================ */
+    .xp-float {
+      position: fixed; pointer-events: none; z-index: 9999;
+      font-family: 'Heebo', sans-serif; font-weight: 900; font-size: 2rem;
+      background: linear-gradient(135deg, var(--purple-core), var(--orange-core));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      background-clip: text;
+      animation: floatUp 2s ease-out forwards;
+    }
+    @keyframes floatUp {
+      0%   { opacity: 1; transform: translateY(0) scale(1); }
+      50%  { opacity: 1; transform: translateY(-50px) scale(1.2); }
+      100% { opacity: 0; transform: translateY(-120px) scale(0.8); }
+    }
+
+    /* ============================================================
+       LEVEL UP MODAL
+    ============================================================ */
+    #levelUpModal {
+      position: fixed; inset: 0; z-index: 1000;
+      background: rgba(0,0,0,0.85); backdrop-filter: blur(8px);
+      display: flex; align-items: center; justify-content: center;
+      transition: opacity 0.4s;
+    }
+    #levelUpModal.hidden { opacity: 0; pointer-events: none; }
+    .levelup-card {
+      background: var(--bg-card); border-radius: 24px;
+      border: 1px solid rgba(168,85,247,0.5);
+      box-shadow: 0 0 60px rgba(168,85,247,0.3);
+      padding: 3rem 2rem; text-align: center; max-width: 340px; width: 90%;
+      animation: levelUpPop 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+    }
+    @keyframes levelUpPop {
+      from { transform: scale(0.5); opacity: 0; }
+      to   { transform: scale(1);   opacity: 1; }
+    }
+    .levelup-num {
+      font-family: 'Heebo', sans-serif; font-weight: 900; font-size: 5rem;
+      background: linear-gradient(135deg, var(--purple-core), var(--pink-core), var(--orange-core));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+      line-height: 1;
+    }
+    .confetti-piece {
+      position: absolute; width: 10px; height: 10px;
+      animation: confettiFall linear forwards;
+    }
+    @keyframes confettiFall {
+      0%   { transform: translate(0,0) rotate(0deg); opacity: 1; }
+      100% { transform: translate(var(--tx), 100vh) rotate(720deg); opacity: 0; }
+    }
+
+    /* ============================================================
+       LOADING SPINNER
+    ============================================================ */
+    .spinner {
+      width: 24px; height: 24px; border-radius: 50%;
+      border: 3px solid rgba(168,85,247,0.2);
+      border-top-color: var(--purple-core);
+      animation: spin 0.8s linear infinite;
+      display: inline-block;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* ============================================================
+       WELCOME / SPLASH
+    ============================================================ */
+    .splash-title {
+      font-family: 'Heebo', sans-serif; font-weight: 900; font-size: clamp(2.5rem, 8vw, 4rem);
+      background: linear-gradient(135deg, var(--purple-core), var(--pink-core), var(--orange-core));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+      line-height: 1.1; letter-spacing: -0.5px;
+    }
+    .splash-subtitle {
+      color: var(--text-secondary); font-size: 1.1rem; margin-top: 0.75rem; line-height: 1.6;
+    }
+    .logo-glyph {
+      width: 64px; height: 64px; border-radius: 18px;
+      background: linear-gradient(135deg, var(--purple-core), var(--pink-core));
+      display: flex; align-items: center; justify-content: center;
+      box-shadow: var(--glow-purple); font-size: 2rem;
+    }
+
+    /* ============================================================
+       STAT CHIPS
+    ============================================================ */
+    .stat-chip {
+      display: flex; flex-direction: column; align-items: center;
+      background: var(--bg-elevated); border: 1px solid var(--border-subtle);
+      border-radius: 14px; padding: 0.875rem 1rem; flex: 1; text-align: center;
+    }
+    .stat-chip .stat-val {
+      font-family: 'Heebo', sans-serif; font-weight: 900; font-size: 1.5rem;
+    }
+    .stat-chip .stat-lbl { font-size: 0.75rem; color: var(--text-muted); margin-top: 0.2rem; }
+
+    /* ============================================================
+       TOAST
+    ============================================================ */
+    #toast {
+      position: fixed; bottom: 2rem; left: 50%; transform: translateX(-50%) translateY(80px);
+      z-index: 2000; background: var(--bg-elevated); border: 1px solid var(--border-subtle);
+      border-radius: 12px; padding: 0.875rem 1.5rem;
+      font-family: 'Rubik', sans-serif; font-size: 0.9rem;
+      box-shadow: 0 8px 30px rgba(0,0,0,0.5);
+      transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.3s;
+      opacity: 0;
+    }
+    #toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
+
+    /* ============================================================
+       SCROLLABLE DASH CONTENT
+    ============================================================ */
+    .section-label {
+      font-family: 'Heebo', sans-serif; font-weight: 700; font-size: 0.75rem;
+      text-transform: uppercase; letter-spacing: 1.5px; color: var(--text-muted);
+      margin-bottom: 0.75rem; display: block;
+    }
+
+    /* Streak ring */
+    .streak-ring {
+      width: 44px; height: 44px; border-radius: 50%;
+      background: conic-gradient(var(--orange-core) var(--pct, 0%), var(--bg-elevated) 0%);
+      display: flex; align-items: center; justify-content: center;
+      position: relative;
+    }
+    .streak-ring::before {
+      content: ''; position: absolute; inset: 5px; border-radius: 50%;
+      background: var(--bg-card);
+    }
+    .streak-ring span { position: relative; z-index: 1; font-size: 0.75rem; font-weight: 700; }
+
+    /* Generate quest button */
+    .gen-btn {
+      display: flex; align-items: center; justify-content: center; gap: 0.5rem;
+      background: linear-gradient(135deg, var(--purple-core), var(--pink-core));
+      color: white; border: none; border-radius: 12px;
+      font-family: 'Heebo', sans-serif; font-weight: 700; font-size: 0.95rem;
+      padding: 0.875rem 1.5rem; cursor: pointer;
+      transition: transform 0.2s, box-shadow 0.3s;
+      box-shadow: 0 4px 20px rgba(168,85,247,0.3);
+      width: 100%;
+    }
+    .gen-btn:hover { transform: translateY(-2px); box-shadow: var(--glow-purple); }
+    .gen-btn:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
+
+    /* divider */
+    .divider { height: 1px; background: var(--border-subtle); margin: 1.5rem 0; }
+
+    /* completed checkmark */
+    .check-circle {
+      width: 28px; height: 28px; border-radius: 50%;
+      background: linear-gradient(135deg, var(--green-core), #16a34a);
+      display: inline-flex; align-items: center; justify-content: center;
+      font-size: 0.85rem; flex-shrink: 0;
+    }
+
+    /* mobile bottom safe area */
+    .bottom-safe { height: env(safe-area-inset-bottom, 1rem); }
+
+    /* pulse animation for quest icon */
+    .pulse-icon { animation: iconPulse 3s ease-in-out infinite; }
+    @keyframes iconPulse {
+      0%, 100% { transform: scale(1); }
+      50%       { transform: scale(1.1); }
+    }
+
+    /* ============================================================
+       RESPONSIVE
+    ============================================================ */
+    @media (max-width: 400px) {
+      .card { padding: 1.5rem; }
+      .goal-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════════════════════════════
+     BACKGROUND MESH
+═══════════════════════════════════════════════════════════════ -->
+<div class="bg-mesh"></div>
+
+<!-- ═══════════════════════════════════════════════════════════════
+     TOAST NOTIFICATION
+═══════════════════════════════════════════════════════════════ -->
+<div id="toast">טוען...</div>
+
+<!-- ═══════════════════════════════════════════════════════════════
+     LEVEL UP MODAL
+═══════════════════════════════════════════════════════════════ -->
+<div id="levelUpModal" class="hidden">
+  <div class="levelup-card">
+    <div style="font-size:3rem; margin-bottom:0.5rem;">🔓</div>
+    <div style="font-family:'Heebo',sans-serif;font-weight:700;font-size:1.1rem;color:var(--text-secondary);margin-bottom:0.5rem;">LEVEL UP</div>
+    <div class="levelup-num" id="levelUpNum">2</div>
+    <div style="font-family:'Heebo',sans-serif;font-weight:700;font-size:1.3rem;margin-top:0.75rem;color:var(--text-primary);">רמה חדשה הושגה!</div>
+    <p style="color:var(--text-secondary);font-size:0.9rem;margin-top:0.5rem;line-height:1.5;">אתה ממשיך להתפתח.<br/>המשך כך — אל תעצור.</p>
+    <button onclick="closeLevelUp()" class="btn-primary" style="margin-top:1.5rem;border-radius:12px;">💪 המשך</button>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════
+     SCREEN 0 — SPLASH / WELCOME
+═══════════════════════════════════════════════════════════════ -->
+<div id="screen-splash" class="screen active">
+  <div class="onboarding-card">
+    <div class="card card-glow text-center">
+      <div class="logo-glyph mx-auto mb-6">🔓</div>
+      <h1 class="splash-title">UNLOCK</h1>
+      <p class="splash-subtitle">שחרר את הגרסה האמיתית שלך.<br/>אין עוד תירוצים. רק תוצאות.</p>
+
+      <div style="margin:2rem 0; padding:1.25rem; background:var(--bg-elevated); border-radius:14px; border:1px solid var(--border-subtle);">
+        <p style="font-size:0.875rem;color:var(--text-secondary);line-height:1.7;margin:0;">
+          תכנית זו נבנית סביב <strong style="color:var(--text-primary);">האמת שלך</strong> בלבד.<br/>
+          ענה בכנות. לא תמצא פה כפפות צמר גפן.
+        </p>
+      </div>
+
+      <!-- API Key input -->
+      <div style="text-align:right; margin-bottom:1.5rem;">
+        <label style="display:block;font-size:0.8rem;color:var(--text-muted);margin-bottom:0.5rem;font-weight:500;">
+          🔑 מפתח Gemini API (אופציונלי)
+        </label>
+        <input type="text" id="apiKeyInput" placeholder="AIza..." style="font-size:0.85rem;padding:0.75rem 1rem;direction:ltr;text-align:left;" />
+        <p style="font-size:0.72rem;color:var(--text-muted);margin-top:0.4rem;line-height:1.5;">
+          ללא מפתח, ישתמש במשימות מוכנות מראש. קבל מפתח חינמי ב-<span style="color:var(--purple-core);">aistudio.google.com</span>
+        </p>
+      </div>
+
+      <button class="btn-primary" onclick="startOnboarding()">
+        🚀 בואו נתחיל
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════
+     SCREEN 1–6 — ONBOARDING
+═══════════════════════════════════════════════════════════════ -->
+<div id="screen-onboarding" class="screen hidden">
+  <div class="onboarding-card">
+
+    <!-- Dots -->
+    <div class="step-dots mb-6" id="stepDots"></div>
+
+    <!-- Step content will be rendered here -->
+    <div id="stepContent"></div>
+
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════
+     SCREEN — DASHBOARD
+═══════════════════════════════════════════════════════════════ -->
+<div id="screen-dashboard" class="screen hidden">
+  <div class="dash-wrapper">
+
+    <!-- ── Top Bar ── -->
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1.5rem;">
+      <div class="logo-glyph" style="width:42px;height:42px;border-radius:12px;font-size:1.25rem;">🔓</div>
+      <h1 style="font-family:'Heebo',sans-serif;font-weight:900;font-size:1.3rem;background:linear-gradient(135deg,var(--purple-core),var(--pink-core));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">UNLOCK</h1>
+      <button onclick="resetApp()" style="background:none;border:none;color:var(--text-muted);font-size:0.75rem;cursor:pointer;font-family:'Rubik',sans-serif;">⚙️</button>
+    </div>
+
+    <!-- ── Mode Toggle ── -->
+    <div class="mode-toggle-bar">
+      <button class="mode-toggle-btn active" id="toggleLevels" onclick="setMode('levels')">⚔️ מצב רמות</button>
+      <button class="mode-toggle-btn" id="toggleAura" onclick="setMode('aura')">✨ מצב אאורה</button>
+    </div>
+
+    <!-- ── Levels Panel ── -->
+    <div id="levelsPanel" class="card card-glow mb-4">
+      <div style="display:flex;align-items:center;gap:1rem;margin-bottom:1.25rem;">
+        <div class="level-badge" id="levelBadge">1</div>
+        <div style="flex:1">
+          <div style="font-family:'Heebo',sans-serif;font-weight:900;font-size:1.4rem;" id="levelTitle">מתחיל</div>
+          <div style="font-size:0.8rem;color:var(--text-muted);">השלב הראשון במסע שלך</div>
+        </div>
+      </div>
+      <div class="xp-bar-track mb-2">
+        <div class="xp-bar-fill" id="xpBarFill" style="width:0%"></div>
+      </div>
+      <div style="display:flex;justify-content:space-between;align-items:center;">
+        <span style="font-size:0.8rem;color:var(--text-muted);">XP</span>
+        <span style="font-family:'Heebo',sans-serif;font-weight:700;font-size:0.9rem;color:var(--purple-core);" id="xpText">0 / 100 XP</span>
+      </div>
+    </div>
+
+    <!-- ── Aura Panel ── -->
+    <div id="auraPanel" class="card card-glow mb-4" style="display:none;">
+      <div style="text-align:center;margin-bottom:1rem;">
+        <div style="font-size:0.8rem;color:var(--text-muted);letter-spacing:2px;text-transform:uppercase;font-weight:600;margin-bottom:0.5rem;">TOTAL AURA</div>
+        <div class="aura-score" id="auraScore">0</div>
+        <div style="font-size:0.8rem;color:var(--text-muted);margin-top:0.25rem;">נקודות אאורה</div>
+      </div>
+      <div class="xp-bar-track">
+        <div class="xp-bar-fill aura-bar-fill" id="auraBarFill" style="width:5%"></div>
+      </div>
+    </div>
+
+    <!-- ── Stats Row ── -->
+    <div style="display:flex;gap:0.75rem;margin-bottom:1.5rem;">
+      <div class="stat-chip">
+        <span class="stat-val" id="statStreak" style="color:var(--orange-core);">0</span>
+        <span class="stat-lbl">🔥 רצף ימים</span>
+      </div>
+      <div class="stat-chip">
+        <span class="stat-val" id="statQuests" style="color:var(--pink-core);">0</span>
+        <span class="stat-lbl">⚔️ משימות</span>
+      </div>
+      <div class="stat-chip">
+        <span class="stat-val" id="statTotal" style="color:var(--purple-core);">0</span>
+        <span class="stat-lbl">✨ XP כולל</span>
+      </div>
+    </div>
+
+    <!-- ── Category Shortcuts ── -->
+    <span class="section-label">קטגוריות</span>
+    <div class="category-grid mb-6">
+      <div class="cat-item" onclick="showToast('מגיע בקרוב! 💪')">
+        <span class="cat-icon">🏆</span><span class="cat-label">הרגלים</span>
+      </div>
+      <div class="cat-item" onclick="showToast('מגיע בקרוב! 🎨')">
+        <span class="cat-icon">🎯</span><span class="cat-label">תחביבים</span>
+      </div>
+      <div class="cat-item" onclick="showToast('מגיע בקרוב! 🧠')">
+        <span class="cat-icon">🛡️</span><span class="cat-label">חוסן</span>
+      </div>
+    </div>
+
+    <!-- ── SIDE QUEST SECTION ── -->
+    <span class="section-label">משימת צד יומית</span>
+
+    <!-- No quest state -->
+    <div id="noQuestState" class="card" style="text-align:center;padding:2rem;">
+      <div class="pulse-icon" style="font-size:3rem;margin-bottom:1rem;">🗺️</div>
+      <h3 style="font-family:'Heebo',sans-serif;font-weight:700;font-size:1.1rem;margin-bottom:0.5rem;">אין משימה פעילה</h3>
+      <p style="color:var(--text-secondary);font-size:0.875rem;margin-bottom:1.5rem;line-height:1.6;">
+        צור משימת הרפתקה ייחודית שתאתגר אותך לצאת מאזור הנוחות ולחקור את העולם.
+      </p>
+      <button class="gen-btn" id="genQuestBtn" onclick="generateQuest()">
+        <span id="genBtnText">⚡ צור משימת הרפתקה</span>
+        <div class="spinner" id="genSpinner" style="display:none;"></div>
+      </button>
+    </div>
+
+    <!-- Active quest state (hidden until generated) -->
+    <div id="activeQuestState" style="display:none;">
+      <div class="quest-card" id="questCard">
+
+        <!-- Quest Header -->
+        <div class="quest-header">
+          <div style="display:flex;align-items:center;gap:0.75rem;flex:1;min-width:0;">
+            <span style="font-size:1.75rem;flex-shrink:0;">🗺️</span>
+            <div style="min-width:0;">
+              <div id="questTitle" style="font-family:'Heebo',sans-serif;font-weight:900;font-size:1rem;line-height:1.3;"></div>
+            </div>
+          </div>
+          <div style="display:flex;flex-direction:column;align-items:flex-end;gap:0.4rem;flex-shrink:0;margin-right:0.5rem;">
+            <div class="difficulty-badge" id="questDiffBadge">בינוני</div>
+            <div class="xp-tag" id="questXpTag">⚡ 0 XP</div>
+          </div>
+        </div>
+
+        <!-- Double XP Banner -->
+        <div id="doubleXpBanner" style="display:none;padding:0.75rem 1.25rem;background:rgba(249,115,22,0.08);border-bottom:1px solid rgba(249,115,22,0.2);">
+          <div style="display:flex;align-items:center;justify-content:space-between;">
+            <span style="font-size:0.85rem;color:var(--orange-core);font-weight:600;">הכפלת נקודות פעילה!</span>
+            <div class="double-xp-badge">✕2 XP</div>
+          </div>
+        </div>
+
+        <!-- Quest Body -->
+        <div style="padding:1.25rem 1.5rem;">
+          <p id="questDesc" style="color:var(--text-secondary);font-size:0.9rem;line-height:1.7;margin-bottom:1.25rem;"></p>
+
+          <div class="divider"></div>
+
+          <!-- Proof Submission -->
+          <div>
+            <h4 style="font-family:'Heebo',sans-serif;font-weight:700;font-size:0.9rem;margin-bottom:0.75rem;display:flex;align-items:center;gap:0.5rem;">
+              📸 הוכח שהשלמת את המשימה
+            </h4>
+            <p style="font-size:0.8rem;color:var(--text-muted);margin-bottom:1rem;line-height:1.5;">
+              צלם תמונה המוכיחה שהיית שם. Gemini AI יבדוק ויאמת את ההוכחה שלך.
+            </p>
+
+            <div class="upload-zone" id="uploadZone">
+              <input type="file" id="proofFile" accept="image/*" onchange="handleFileSelect(event)" />
+              <div id="uploadPlaceholder">
+                <div style="font-size:2rem;margin-bottom:0.5rem;">📁</div>
+                <div style="font-size:0.875rem;color:var(--text-secondary);font-weight:600;">לחץ או גרור תמונה לכאן</div>
+                <div style="font-size:0.75rem;color:var(--text-muted);margin-top:0.25rem;">JPG, PNG, WEBP עד 10MB</div>
+              </div>
+              <img id="uploadPreview" class="upload-preview" style="display:none;" />
+            </div>
+
+            <!-- Verify Button -->
+            <button class="btn-primary" id="verifyBtn" style="margin-top:1rem;display:none;" onclick="verifyProof()">
+              <span id="verifyBtnText">🔍 אמת הוכחה עם AI</span>
+              <div class="spinner" id="verifySpinner" style="display:none;"></div>
+            </button>
+
+            <!-- Verify Result -->
+            <div id="verifyResult" style="display:none;"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Skip / New Quest -->
+      <div style="display:flex;gap:0.75rem;margin-top:1rem;">
+        <button class="btn-secondary" onclick="skipQuest()" style="flex:1;">🔄 משימה אחרת</button>
+        <button class="btn-secondary" onclick="skipQuest()" style="flex:1;">✕ דלג</button>
+      </div>
+    </div>
+
+    <div class="bottom-safe"></div>
+  </div>
+</div>
+
+
+<!-- ═══════════════════════════════════════════════════════════════
+     JAVASCRIPT — FULL APPLICATION LOGIC
+═══════════════════════════════════════════════════════════════ -->
+<script>
+// =====================================================================
+// GEMINI API KEY (replace with your own key from aistudio.google.com)
+// =====================================================================
+const GEMINI_API_KEY = "YOUR_GEMINI_API_KEY_HERE";
+
+// =====================================================================
+// CONSTANTS & CONFIG
+// =====================================================================
+const XP_PER_LEVEL   = [0, 100, 250, 450, 700, 1000, 1400, 1900, 2500, 3200, 4000];
+const LEVEL_NAMES    = ['','מתחיל','מתפתח','נחוש','לוחם','מוכח','אגדי','אלמוות','טיטאן','מיתוס','UNLOCK'];
+const AURA_PER_QUEST = { 'קל': 500, 'בינוני': 1200, 'קשה': 2500 };
+const GEMINI_MODEL   = 'gemini-1.5-flash';
+
+// Fallback adventure quests (used when no API key or API fails)
+const FALLBACK_QUESTS = [
+  {
+    title: "גלה מבנה נטוש",
+    description: "חפש ואתר מבנה נטוש או מקום שנעזב בעיר שלך — בית ישן, מפעל, תחנת רכבת. צלם את האווירה הייחודית שלו. היה בטוח ואל תכנס לאזורים מסוכנים.",
+    difficulty: "קשה",
+    xp: 150
+  },
+  {
+    title: "אמנות רחוב נסתרת",
+    description: "צא לחפש גרפיטי אמנותי או ציורי קיר שלא ראית בעיר שלך. מצא יצירה שמספרת סיפור — ותעד אותה.",
+    difficulty: "בינוני",
+    xp: 80
+  },
+  {
+    title: "פסגת הזריחה",
+    description: "צא מהבית לפני הזריחה ומצא את הנקודה הגבוהה ביותר הנגישה בסביבתך. צפה בשמש עולה ותצלם את הרגע.",
+    difficulty: "קשה",
+    xp: 120
+  },
+  {
+    title: "שכונה שלא הכרת",
+    description: "לך לשכונה או רחוב בעיר שלך שמעולם לא ביקרת בו. הסתובב שעה בלי מפה — רק עם הסקרנות שלך.",
+    difficulty: "בינוני",
+    xp: 75
+  },
+  {
+    title: "שביל טבע נסתר",
+    description: "מצא שביל טבע או יער שלא חקרת. לך לבד לפחות 30 דקות לתוכו ותעד את הנוף שתגלה.",
+    difficulty: "קל",
+    xp: 50
+  },
+  {
+    title: "גג עם נוף",
+    description: "חפש גג נגיש — של בניין ציבורי, שוק, מרכז קניות — שנותן נוף לעיר. עלה, שב, ונשום את הנוף.",
+    difficulty: "קל",
+    xp: 45
+  },
+  {
+    title: "מקום הקצה",
+    description: "מצא את קצה העיר שלך — איפה הבטון נגמר והטבע מתחיל. תעד את הגבול בין שני העולמות.",
+    difficulty: "בינוני",
+    xp: 90
+  },
+  {
+    title: "חפירה בשוק ישן",
+    description: "מצא שוק ישן, שוק פשפשים, או מחסן וינטג'. הסתובב ומצא חפץ שמספר לך סיפור על מי שחי לפניך.",
+    difficulty: "קל",
+    xp: 40
+  }
+];
+
+// =====================================================================
+// APP STATE
+// =====================================================================
+let state = {
+  apiKey: '',
+  onboarding: {
+    problem:  '',
+    habits:   '',
+    future:   '',
+    mode:     50,        // 0=soft, 100=hard
+    goals:    [],
+    why:      ''
+  },
+  player: {
+    level:      1,
+    xp:         0,
+    totalXp:    0,
+    aura:       0,
+    streak:     0,
+    questsDone: 0,
+    lastQuestDate: null
+  },
+  dashMode: 'levels',    // 'levels' | 'aura'
+  currentQuest: null,
+  questProofBase64: null,
+  questProofMime: null,
+  onboardingComplete: false
+};
+
+// =====================================================================
+// ONBOARDING STEPS DEFINITION
+// =====================================================================
+const STEPS = [
+  {
+    id: 1,
+    icon: '💥',
+    eyebrow: 'שאלה 1 מתוך 6',
+    title: 'מה הבעיה הגדולה ביותר שלך עכשיו?',
+    subtitle: 'אל תסנן. תכתוב את האמת.',
+    type: 'textarea',
+    field: 'problem',
+    maxLen: 700,
+    placeholder: 'הכסף, מערכות יחסים, המצב הנפשי, הפחדים... תכתוב הכל.'
+  },
+  {
+    id: 2,
+    icon: '🔗',
+    eyebrow: 'שאלה 2 מתוך 6',
+    title: '3 הרגלים שמחזיקים אותך אחורה',
+    subtitle: 'מה הדפוסים שאתה יודע שפוגעים בך?',
+    type: 'textarea',
+    field: 'habits',
+    maxLen: 700,
+    placeholder: 'גלילה, דחיינות, אכילה רגשית, הימנעות... תהיה כנה.'
+  },
+  {
+    id: 3,
+    icon: '🔮',
+    eyebrow: 'שאלה 3 מתוך 6',
+    title: 'תמשיך ככה עוד 5 שנים — לאן זה מוביל?',
+    subtitle: 'תדמיין את הגרסה הגרועה שלך.',
+    type: 'textarea',
+    field: 'future',
+    maxLen: 700,
+    placeholder: 'תאר בכנות את התוצאה אם לא ישתנה כלום...'
+  },
+  {
+    id: 4,
+    icon: '🎚️',
+    eyebrow: 'שאלה 4 מתוך 6',
+    title: 'איך אתה רוצה שנדבר אליך?',
+    subtitle: 'בחר את הסגנון שמתאים לך.',
+    type: 'slider'
+  },
+  {
+    id: 5,
+    icon: '🎯',
+    eyebrow: 'שאלה 5 מתוך 6',
+    title: 'מה המטרה שלך?',
+    subtitle: 'בחר את מה שהכי מהדהד בך. (ניתן לבחור יותר מאחד)',
+    type: 'goals'
+  },
+  {
+    id: 6,
+    icon: '❤️‍🔥',
+    eyebrow: 'שאלה 6 מתוך 6',
+    title: 'מה ה-WHY שלך?',
+    subtitle: 'למה זה באמת חשוב לך? זה הדלק שלך.',
+    type: 'textarea',
+    field: 'why',
+    maxLen: 300,
+    placeholder: 'בשביל מי? בשביל מה? מה יהיה שונה?'
+  }
+];
+
+const GOALS_OPTIONS = [
+  { id: 'reset',   icon: '🔄', label: 'לאפס את החיים' },
+  { id: 'lock',    icon: '🔒', label: 'להתמקד ולנעול' },
+  { id: 'alive',   icon: '⚡', label: 'להרגיש חי שוב' },
+  { id: 'money',   icon: '💰', label: 'לשפר כלכלית' },
+  { id: 'body',    icon: '💪', label: 'לשנות הגוף' },
+  { id: 'mind',    icon: '🧠', label: 'שקט נפשי' }
+];
+
+// =====================================================================
+// CURRENT ONBOARDING STEP
+// =====================================================================
+let currentStep = 0;
+
+// =====================================================================
+// INIT — load state from localStorage
+// =====================================================================
+function init() {
+  const saved = localStorage.getItem('unlock_state');
+  if (saved) {
+    try {
+      const parsed = JSON.parse(saved);
+      state = { ...state, ...parsed };
+    } catch(e) {}
+  }
+  if (state.onboardingComplete) {
+    showScreen('dashboard');
+    renderDashboard();
+  }
+}
+
+// =====================================================================
+// SCREEN NAVIGATION
+// =====================================================================
+function showScreen(name) {
+  document.querySelectorAll('.screen').forEach(s => {
+    s.classList.remove('active');
+    s.classList.add('hidden');
+  });
+  const el = document.getElementById('screen-' + name);
+  if (el) {
+    el.classList.remove('hidden');
+    el.classList.add('active');
+  }
+}
+
+// =====================================================================
+// SPLASH → ONBOARDING
+// =====================================================================
+function startOnboarding() {
+  const keyVal = document.getElementById('apiKeyInput').value.trim();
+  if (keyVal && keyVal !== 'YOUR_GEMINI_API_KEY_HERE') {
+    state.apiKey = keyVal;
+  }
+  currentStep = 0;
+  renderStep(currentStep);
+  showScreen('onboarding');
+}
+
+// =====================================================================
+// RENDER STEP DOTS
+// =====================================================================
+function renderDots(activeIdx) {
+  const container = document.getElementById('stepDots');
+  container.innerHTML = '';
+  STEPS.forEach((_, i) => {
+    const d = document.createElement('div');
+    d.className = 'step-dot';
+    if (i < activeIdx)  d.classList.add('done');
+    if (i === activeIdx) d.classList.add('active');
+    container.appendChild(d);
+  });
+}
+
+// =====================================================================
+// RENDER ONBOARDING STEP
+// =====================================================================
+function renderStep(idx) {
+  renderDots(idx);
+  const step = STEPS[idx];
+  const container = document.getElementById('stepContent');
+
+  let html = `
+    <div class="card card-glow" style="animation:slideUp 0.45s cubic-bezier(0.34,1.56,0.64,1) both;">
+      <div style="margin-bottom:1.5rem;">
+        <span style="font-size:0.75rem;color:var(--text-muted);font-weight:600;letter-spacing:1px;text-transform:uppercase;">${step.eyebrow}</span>
+        <div style="font-size:2rem;margin:0.5rem 0;">${step.icon}</div>
+        <h2 style="font-family:'Heebo',sans-serif;font-weight:900;font-size:1.4rem;line-height:1.3;margin-bottom:0.4rem;">${step.title}</h2>
+        <p style="color:var(--text-secondary);font-size:0.9rem;">${step.subtitle}</p>
+      </div>
+  `;
+
+  if (step.type === 'textarea') {
+    const val = state.onboarding[step.field] || '';
+    html += `
+      <div style="position:relative;">
+        <textarea id="stepTextarea" rows="5" maxlength="${step.maxLen}"
+          placeholder="${step.placeholder}"
+          oninput="onTextareaInput(this, ${step.maxLen})">${val}</textarea>
+        <div class="char-counter" id="charCounter" style="margin-top:0.4rem;">${val.length} / ${step.maxLen}</div>
+      </div>
+    `;
+  }
+
+  if (step.type === 'slider') {
+    const val = state.onboarding.mode;
+    html += `
+      <div style="margin:0.5rem 0 1.5rem;">
+        <div style="display:flex;justify-content:space-between;margin-bottom:0.5rem;">
+          <span class="slider-label soft ${val > 30 ? 'inactive' : ''}">עדין ומכיל 💜</span>
+          <span class="slider-label hard ${val < 70 ? 'inactive' : ''}">ישיר ונוקשה 🔥</span>
+        </div>
+        <div class="mode-slider-track">
+          <div class="mode-slider-fill" id="sliderFill" style="width:${val}%"></div>
+          <input type="range" id="modeSlider" min="0" max="100" value="${val}"
+            style="position:absolute;top:-10px;margin:0;padding:0;"
+            oninput="onSliderChange(this.value)" />
+        </div>
+        <div style="text-align:center;margin-top:0.75rem;">
+          <span class="slider-value-badge" id="sliderBadge">${getSliderLabel(val)}</span>
+        </div>
+      </div>
+    `;
+  }
+
+  if (step.type === 'goals') {
+    html += `<div class="goal-grid">`;
+    GOALS_OPTIONS.forEach(g => {
+      const sel = state.onboarding.goals.includes(g.id) ? 'selected' : '';
+      html += `
+        <div class="goal-item ${sel}" data-goal="${g.id}" onclick="toggleGoal('${g.id}')">
+          <span class="goal-icon">${g.icon}</span>
+          ${g.label}
+        </div>`;
+    });
+    html += `</div>`;
+  }
+
+  // Navigation buttons
+  html += `<div style="display:flex;gap:0.75rem;margin-top:1.5rem;">`;
+  if (idx > 0) {
+    html += `<button class="btn-secondary" style="flex:0 0 auto;padding:0.875rem 1.25rem;" onclick="goStep(${idx-1})">← חזרה</button>`;
+  }
+  html += `<button class="btn-primary" id="nextBtn" onclick="goStep(${idx+1})" style="flex:1;">
+    ${idx === STEPS.length - 1 ? '🚀 בואו נתחיל!' : 'המשך →'}
+  </button>`;
+  html += `</div></div>`;
+
+  container.innerHTML = html;
+}
+
+function onTextareaInput(el, max) {
+  const len = el.value.length;
+  const counter = document.getElementById('charCounter');
+  if (counter) {
+    counter.textContent = len + ' / ' + max;
+    counter.className = 'char-counter';
+    if (len > max * 0.85) counter.classList.add('warn');
+    if (len >= max)       counter.classList.add('max');
+  }
+}
+
+function getSliderLabel(val) {
+  if (val < 20)  return '💜 עדין ומכיל לגמרי';
+  if (val < 40)  return '🌊 מאוזן, קצת עדין';
+  if (val < 60)  return '⚖️ איזון מושלם';
+  if (val < 80)  return '🔥 ישיר ונחוש';
+  return '💀 קשוח ללא רחמים';
+}
+
+function onSliderChange(val) {
+  state.onboarding.mode = parseInt(val);
+  const fill = document.getElementById('sliderFill');
+  const badge = document.getElementById('sliderBadge');
+  const softLbl = document.querySelector('.slider-label.soft');
+  const hardLbl = document.querySelector('.slider-label.hard');
+  if (fill)    fill.style.width = val + '%';
+  if (badge)   badge.textContent = getSliderLabel(val);
+  if (softLbl) softLbl.classList.toggle('inactive', val > 30);
+  if (hardLbl) hardLbl.classList.toggle('inactive', val < 70);
+}
+
+function toggleGoal(id) {
+  const arr = state.onboarding.goals;
+  const idx = arr.indexOf(id);
+  if (idx === -1) arr.push(id);
+  else arr.splice(idx, 1);
+  document.querySelectorAll('.goal-item').forEach(el => {
+    el.classList.toggle('selected', arr.includes(el.dataset.goal));
+  });
+}
+
+// =====================================================================
+// STEP NAVIGATION WITH VALIDATION
+// =====================================================================
+function goStep(nextIdx) {
+  const step = STEPS[currentStep];
+
+  // Save current step data
+  if (step.type === 'textarea' && step.field) {
+    const el = document.getElementById('stepTextarea');
+    if (el) state.onboarding[step.field] = el.value;
+  }
+  if (step.type === 'slider') {
+    const el = document.getElementById('modeSlider');
+    if (el) state.onboarding.mode = parseInt(el.value);
+  }
+
+  // Validate
+  if (nextIdx > currentStep) {
+    if (step.type === 'textarea' && step.field) {
+      const val = (state.onboarding[step.field] || '').trim();
+      if (val.length < 10) {
+        showToast('✋ כתוב לפחות 10 תווים — תהיה כנה עם עצמך');
+        return;
+      }
+    }
+    if (step.type === 'goals' && state.onboarding.goals.length === 0) {
+      showToast('🎯 בחר לפחות מטרה אחת');
+      return;
+    }
+  }
+
+  // If we're past the last step → complete onboarding
+  if (nextIdx >= STEPS.length) {
+    completeOnboarding();
+    return;
+  }
+
+  currentStep = nextIdx;
+  renderStep(currentStep);
+}
+
+// =====================================================================
+// COMPLETE ONBOARDING
+// =====================================================================
+function completeOnboarding() {
+  state.onboardingComplete = true;
+  saveState();
+  showScreen('dashboard');
+  renderDashboard();
+}
+
+// =====================================================================
+// DASHBOARD RENDER
+// =====================================================================
+function renderDashboard() {
+  updateLevelDisplay();
+  updateAuraDisplay();
+  updateStats();
+  setMode(state.dashMode);
+}
+
+function updateLevelDisplay() {
+  const p = state.player;
+  const level = p.level;
+  const nextLevelXp = XP_PER_LEVEL[Math.min(level, XP_PER_LEVEL.length - 1)];
+  const prevLevelXp = XP_PER_LEVEL[Math.min(level - 1, XP_PER_LEVEL.length - 1)] || 0;
+  const progressXp  = p.xp - prevLevelXp;
+  const neededXp    = nextLevelXp - prevLevelXp;
+  const pct         = Math.min(100, Math.round((progressXp / neededXp) * 100));
+
+  document.getElementById('levelBadge').textContent = 'lvl ' + level;
+  document.getElementById('levelTitle').textContent  = LEVEL_NAMES[Math.min(level, LEVEL_NAMES.length - 1)];
+  document.getElementById('xpBarFill').style.width   = pct + '%';
+  document.getElementById('xpText').textContent      = progressXp + ' / ' + neededXp + ' XP';
+}
+
+function updateAuraDisplay() {
+  const aura = state.player.aura;
+  document.getElementById('auraScore').textContent = aura.toLocaleString('he-IL');
+  const auraBarPct = Math.min(100, (aura % 10000) / 100);
+  document.getElementById('auraBarFill').style.width = Math.max(3, auraBarPct) + '%';
+}
+
+function updateStats() {
+  document.getElementById('statStreak').textContent = state.player.streak;
+  document.getElementById('statQuests').textContent = state.player.questsDone;
+  document.getElementById('statTotal').textContent  = state.player.totalXp;
+}
+
+// =====================================================================
+// MODE TOGGLE
+// =====================================================================
+function setMode(mode) {
+  state.dashMode = mode;
+  document.getElementById('toggleLevels').classList.toggle('active', mode === 'levels');
+  document.getElementById('toggleAura').classList.toggle('active', mode === 'aura');
+  document.getElementById('levelsPanel').style.display = mode === 'levels' ? 'block' : 'none';
+  document.getElementById('auraPanel').style.display   = mode === 'aura'   ? 'block' : 'none';
+  saveState();
+}
+
+// =====================================================================
+// QUEST GENERATION
+// =====================================================================
+async function generateQuest() {
+  const btn = document.getElementById('genQuestBtn');
+  const spinner = document.getElementById('genSpinner');
+  const btnText = document.getElementById('genBtnText');
+
+  btn.disabled = true;
+  spinner.style.display = 'inline-block';
+  btnText.textContent = 'יוצר משימה...';
+
+  const activeKey = state.apiKey || GEMINI_API_KEY;
+  let quest = null;
+
+  if (activeKey && activeKey !== 'YOUR_GEMINI_API_KEY_HERE') {
+    quest = await generateQuestWithGemini(activeKey);
+  }
+
+  if (!quest) {
+    // Use fallback
+    const idx = Math.floor(Math.random() * FALLBACK_QUESTS.length);
+    quest = { ...FALLBACK_QUESTS[idx] };
+    showToast('🗺️ משימת הרפתקה נוצרה!');
+  }
+
+  state.currentQuest = quest;
+  state.questProofBase64 = null;
+  state.questProofMime = null;
+  saveState();
+
+  btn.disabled = false;
+  spinner.style.display = 'none';
+  btnText.textContent = '⚡ צור משימת הרפתקה';
+
+  displayQuest(quest);
+}
+
+async function generateQuestWithGemini(apiKey) {
+  try {
+    const modeLabel = state.onboarding.mode > 60 ? 'אגרסיבי ומאתגר מאוד' : 'מעודד אך ממוקד';
+    const prompt = `
+אתה מאמן הרפתקות עירוניות. המשתמש עונה על הפרופיל הבא:
+- בעיה מרכזית: ${state.onboarding.problem.slice(0,200)}
+- הרגלים בעייתיים: ${state.onboarding.habits.slice(0,200)}
+- מטרות: ${state.onboarding.goals.join(', ')}
+- סגנון: ${modeLabel}
+
+צור משימת הרפתקה עירונית / חוצות שמאתגרת את המשתמש לצאת מאזור הנוחות ולחקור את העולם הפיזי.
+נושאי עדיפות: חקירת מבנים נטושים (בצורה בטוחה), אמנות רחוב נסתרת, פסגות גיאוגרפיות, שכונות לא מוכרות, שבילי טבע.
+
+החזר JSON בלבד (ללא markdown, ללא backticks, ללא הסבר), בעברית:
+{"title":"...","description":"...","difficulty":"קל/בינוני/קשה","xp":NUMBER}
+
+ה-xp צריך להיות: קל=30-60, בינוני=70-100, קשה=110-180.
+`;
+
+    const response = await fetch(
+      `https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_MODEL}:generateContent?key=${apiKey}`,
+      {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          contents: [{ parts: [{ text: prompt }] }],
+          generationConfig: { temperature: 0.9, maxOutputTokens: 512 }
+        })
+      }
+    );
+
+    if (!response.ok) throw new Error('API error ' + response.status);
+    const data = await response.json();
+    const raw = data.candidates?.[0]?.content?.parts?.[0]?.text || '';
+    const clean = raw.replace(/```json|```/g, '').trim();
+    const parsed = JSON.parse(clean);
+    if (!parsed.title || !parsed.description || !parsed.difficulty) throw new Error('bad format');
+    return parsed;
+  } catch(e) {
+    console.warn('Gemini quest gen failed:', e);
+    return null;
+  }
+}
+
+// =====================================================================
+// DISPLAY QUEST
+// =====================================================================
+function displayQuest(quest) {
+  document.getElementById('noQuestState').style.display = 'none';
+  document.getElementById('activeQuestState').style.display = 'block';
+
+  document.getElementById('questTitle').textContent = quest.title;
+  document.getElementById('questDesc').textContent  = quest.description;
+
+  // Difficulty badge
+  const diffEl = document.getElementById('questDiffBadge');
+  diffEl.textContent = quest.difficulty;
+  diffEl.className   = 'difficulty-badge';
+  if (quest.difficulty === 'קל')     diffEl.classList.add('diff-easy');
+  if (quest.difficulty === 'בינוני') diffEl.classList.add('diff-medium');
+  if (quest.difficulty === 'קשה')    diffEl.classList.add('diff-hard');
+
+  // XP tag
+  const isDouble = quest.difficulty === 'קשה';
+  const displayXp = isDouble ? quest.xp * 2 : quest.xp;
+  document.getElementById('questXpTag').innerHTML = `⚡ ${isDouble ? quest.xp + ' × 2 = ' + displayXp : displayXp} XP`;
+
+  // Double XP banner
+  const banner = document.getElementById('doubleXpBanner');
+  banner.style.display = isDouble ? 'block' : 'none';
+
+  // Hard glow on card
+  const card = document.getElementById('questCard');
+  card.classList.toggle('hard-glow', isDouble);
+
+  // Reset proof area
+  document.getElementById('uploadPreview').style.display = 'none';
+  document.getElementById('uploadPlaceholder').style.display = 'block';
+  document.getElementById('verifyBtn').style.display = 'none';
+  document.getElementById('verifyResult').style.display = 'none';
+  const fileInput = document.getElementById('proofFile');
+  if (fileInput) fileInput.value = '';
+}
+
+// =====================================================================
+// FILE UPLOAD / PROOF
+// =====================================================================
+function handleFileSelect(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+
+  const reader = new FileReader();
+  reader.onload = (e) => {
+    const dataUrl = e.target.result;
+    const base64  = dataUrl.split(',')[1];
+    state.questProofBase64 = base64;
+    state.questProofMime   = file.type;
+
+    // Show preview
+    const preview = document.getElementById('uploadPreview');
+    preview.src = dataUrl;
+    preview.style.display = 'block';
+    document.getElementById('uploadPlaceholder').style.display = 'none';
+    document.getElementById('verifyBtn').style.display = 'block';
+    document.getElementById('verifyResult').style.display = 'none';
+  };
+  reader.readAsDataURL(file);
+}
+
+// =====================================================================
+// VERIFY PROOF WITH GEMINI VISION
+// =====================================================================
+async function verifyProof() {
+  if (!state.questProofBase64 || !state.currentQuest) return;
+
+  const verifyBtn  = document.getElementById('verifyBtn');
+  const verifyText = document.getElementById('verifyBtnText');
+  const spinner    = document.getElementById('verifySpinner');
+  const resultEl   = document.getElementById('verifyResult');
+
+  verifyBtn.disabled = true;
+  spinner.style.display = 'inline-block';
+  verifyText.textContent = 'מאמת...';
+
+  const activeKey = state.apiKey || GEMINI_API_KEY;
+  let result = null;
+
+  if (activeKey && activeKey !== 'YOUR_GEMINI_API_KEY_HERE') {
+    result = await verifyWithGeminiVision(activeKey);
+  } else {
+    // Fallback: simulate verification
+    await new Promise(r => setTimeout(r, 1500));
+    result = {
+      verified: true,
+      reason: 'ללא מפתח API, האימות עבר אוטומטית. בפועל Gemini Vision היה בודק את התמונה.'
+    };
+  }
+
+  verifyBtn.disabled = false;
+  spinner.style.display = 'none';
+  verifyText.textContent = '🔍 אמת הוכחה עם AI';
+
+  resultEl.style.display = 'block';
+
+  if (result.verified) {
+    resultEl.innerHTML = `
+      <div class="verify-result verify-success">
+        <span style="font-size:1.5rem;flex-shrink:0;">✅</span>
+        <div>
+          <div style="font-family:'Heebo',sans-serif;font-weight:700;color:#22c55e;margin-bottom:0.3rem;">הוכחה אומתה!</div>
+          <div style="font-size:0.85rem;color:var(--text-secondary);line-height:1.5;">${result.reason}</div>
+        </div>
+      </div>`;
+    // Award XP
+    setTimeout(() => awardQuestXp(), 600);
+  } else {
+    resultEl.innerHTML = `
+      <div class="verify-result verify-fail">
+        <span style="font-size:1.5rem;flex-shrink:0;">❌</span>
+        <div>
+          <div style="font-family:'Heebo',sans-serif;font-weight:700;color:#ef4444;margin-bottom:0.3rem;">לא אומת</div>
+          <div style="font-size:0.85rem;color:var(--text-secondary);line-height:1.5;">${result.reason}</div>
+        </div>
+      </div>`;
+  }
+}
+
+async function verifyWithGeminiVision(apiKey) {
+  try {
+    const quest = state.currentQuest;
+    const prompt = `
+אתה שופט אובייקטיבי לאתגרי הרפתקות. משימת הרפתקה:
+"${quest.title}" — ${quest.description}
+
+בדוק את התמונה המצורפת. האם היא מוכיחה באופן סביר שהמשתמש ביצע מאמץ להשלים את המשימה?
+(למשל: מבנה ישן, נוף חיצוני, רחוב ספציפי, אמנות רחוב, שביל טבע, גג/פסגה)
+
+החזר JSON בלבד בעברית (ללא markdown):
+{"verified":true/false,"reason":"הסבר קצר בעברית"}
+`;
+
+    const response = await fetch(
+      `https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_MODEL}:generateContent?key=${apiKey}`,
+      {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          contents: [{
+            parts: [
+              { text: prompt },
+              { inline_data: { mime_type: state.questProofMime, data: state.questProofBase64 } }
+            ]
+          }],
+          generationConfig: { temperature: 0.1, maxOutputTokens: 256 }
+        })
+      }
+    );
+
+    if (!response.ok) throw new Error('Vision API error ' + response.status);
+    const data = await response.json();
+    const raw  = data.candidates?.[0]?.content?.parts?.[0]?.text || '';
+    const clean = raw.replace(/```json|```/g, '').trim();
+    return JSON.parse(clean);
+  } catch(e) {
+    console.warn('Gemini vision failed:', e);
+    return { verified: false, reason: 'שגיאה בחיבור ל-Gemini API. נסה שנית.' };
+  }
+}
+
+// =====================================================================
+// AWARD XP
+// =====================================================================
+function awardQuestXp() {
+  const quest   = state.currentQuest;
+  if (!quest) return;
+
+  const isDouble = quest.difficulty === 'קשה';
+  const xpGain   = isDouble ? quest.xp * 2 : quest.xp;
+  const auraGain = isDouble
+    ? (AURA_PER_QUEST[quest.difficulty] || 1200) * 2
+    : (AURA_PER_QUEST[quest.difficulty] || 1200);
+
+  // Animate floating XP text
+  spawnXpFloat('+' + xpGain + ' XP' + (isDouble ? ' 🔥' : ''));
+
+  // Update player
+  state.player.xp      += xpGain;
+  state.player.totalXp += xpGain;
+  state.player.aura    += auraGain;
+  state.player.questsDone += 1;
+
+  // Update streak
+  const today = new Date().toDateString();
+  if (state.player.lastQuestDate !== today) {
+    const yesterday = new Date(Date.now() - 86400000).toDateString();
+    state.player.streak = (state.player.lastQuestDate === yesterday)
+      ? state.player.streak + 1 : 1;
+    state.player.lastQuestDate = today;
+  }
+
+  // Check level up
+  checkLevelUp();
+
+  // Update UI
+  renderDashboard();
+  saveState();
+
+  // Reset quest after 2s
+  setTimeout(() => {
+    state.currentQuest = null;
+    document.getElementById('noQuestState').style.display = 'block';
+    document.getElementById('activeQuestState').style.display = 'none';
+    showToast('🏆 משימה הושלמה! +' + xpGain + ' XP');
+  }, 2000);
+}
+
+function checkLevelUp() {
+  const p = state.player;
+  let leveled = false;
+  while (p.level < XP_PER_LEVEL.length - 1 && p.xp >= XP_PER_LEVEL[p.level]) {
+    p.level++;
+    leveled = true;
+  }
+  if (leveled) {
+    showLevelUp(p.level);
+    spawnConfetti();
+  }
+}
+
+// =====================================================================
+// SKIP QUEST
+// =====================================================================
+function skipQuest() {
+  state.currentQuest = null;
+  saveState();
+  document.getElementById('noQuestState').style.display = 'block';
+  document.getElementById('activeQuestState').style.display = 'none';
+}
+
+// =====================================================================
+// FLOATING XP ANIMATION
+// =====================================================================
+function spawnXpFloat(text) {
+  const el = document.createElement('div');
+  el.className = 'xp-float';
+  el.textContent = text;
+  el.style.left = '50%';
+  el.style.top  = '40%';
+  el.style.transform = 'translateX(-50%)';
+  document.body.appendChild(el);
+  setTimeout(() => el.remove(), 2200);
+}
+
+// =====================================================================
+// LEVEL UP MODAL
+// =====================================================================
+function showLevelUp(level) {
+  document.getElementById('levelUpNum').textContent = level;
+  document.getElementById('levelUpModal').classList.remove('hidden');
+}
+function closeLevelUp() {
+  document.getElementById('levelUpModal').classList.add('hidden');
+}
+
+// =====================================================================
+// CONFETTI
+// =====================================================================
+function spawnConfetti() {
+  const colors = ['#a855f7','#ec4899','#f97316','#eab308','#22c55e','#06b6d4'];
+  for (let i = 0; i < 60; i++) {
+    const el = document.createElement('div');
+    el.className = 'confetti-piece';
+    el.style.cssText = `
+      left: ${Math.random() * 100}vw;
+      top: -10px;
+      background: ${colors[Math.floor(Math.random() * colors.length)]};
+      border-radius: ${Math.random() > 0.5 ? '50%' : '2px'};
+      width: ${6 + Math.random() * 8}px;
+      height: ${6 + Math.random() * 8}px;
+      --tx: ${(Math.random() - 0.5) * 200}px;
+      animation-duration: ${2 + Math.random() * 2}s;
+      animation-delay: ${Math.random() * 0.5}s;
+    `;
+    document.body.appendChild(el);
+    setTimeout(() => el.remove(), 4500);
+  }
+}
+
+// =====================================================================
+// TOAST
+// =====================================================================
+let toastTimer = null;
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  if (toastTimer) clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => t.classList.remove('show'), 3000);
+}
+
+// =====================================================================
+// SAVE / LOAD STATE
+// =====================================================================
+function saveState() {
+  localStorage.setItem('unlock_state', JSON.stringify(state));
+}
+
+// =====================================================================
+// RESET APP
+// =====================================================================
+function resetApp() {
+  if (confirm('האם לאפס את כל הנתונים ולהתחיל מחדש?')) {
+    localStorage.removeItem('unlock_state');
+    location.reload();
+  }
+}
+
+// =====================================================================
+// BOOT
+// =====================================================================
+document.addEventListener('DOMContentLoaded', init);
+</script>
+
+</body>
+</html>
